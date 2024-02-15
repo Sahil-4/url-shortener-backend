@@ -1,6 +1,24 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
 
-const userSchema = new Schema({});
+// users schema
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: [true, "username is a required feild"],
+    },
+    email: {
+      type: String,
+      required: [true, "email is a required feild"]
+    },
+    password: {
+      type: String,
+      required: [true, "password is a required feild"],
+    },
+  },
+  { timestamps: true }
+);
 
-const User = model("users", userSchema);
+// creating and exporting User model
+const User = model("User", userSchema);
 export default User;
