@@ -1,12 +1,12 @@
 import { model, Schema, Types } from "mongoose";
 
-// URL schema 
+// URL schema
 const urlSchema = new Schema(
   {
-    short_url: { 
+    short_url: {
       type: String,
       required: [true, "short_url is a required feild"],
-      index: true
+      index: true,
     },
     original_url: {
       type: String,
@@ -17,14 +17,20 @@ const urlSchema = new Schema(
       ref: "User",
       required: [true, "user_id is a required feild"],
     },
-    visits: { 
+    visits: {
       type: Number,
-      default: 0
+      default: 0,
     },
   },
   { timestamps: true }
 );
 
-// creating and exporting URL model 
+// update url hit count
+urlSchema.methods.increamentHits = async function () {
+  this.visits = this.visits + 1;
+  await this.save();
+};
+
+// creating and exporting URL model
 const URL = model("URL", urlSchema);
 export default URL;
