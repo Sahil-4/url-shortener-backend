@@ -9,7 +9,7 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, "email is a required feild"]
+      required: [true, "email is a required feild"],
     },
     password: {
       type: String,
@@ -18,6 +18,21 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+// hash password before saving user object in database
+userSchema.pre("save", async function (next) {
+  // if password feild is not modified
+  if (!this.isModified("password")) return next();
+
+  // if password is changed then hash it
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
+
+// check whether password is correct or not
+userSchema.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 // creating and exporting User model
 const User = model("User", userSchema);
