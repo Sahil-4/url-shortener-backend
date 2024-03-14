@@ -7,6 +7,7 @@ const urlSchema = new Schema(
       type: String,
       required: [true, "short_url is a required feild"],
       index: true,
+      unique: true,
     },
     original_url: {
       type: String,
