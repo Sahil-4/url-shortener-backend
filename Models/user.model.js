@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import jwt from "jsonwebtoken";
 
 // users schema
 const userSchema = new Schema(
@@ -32,6 +33,15 @@ userSchema.pre("save", async function (next) {
 // check whether password is correct or not
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
+};
+
+// generate access token
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    { _id: this._id, username: this.username },
+    process.env.AUTH_TOKEN,
+    { algorithm: "RS256", expiresIn: "1d" }
+  );
 };
 
 // creating and exporting User model
