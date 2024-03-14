@@ -1,4 +1,5 @@
 import { model, Schema, Types } from "mongoose";
+import { getShortURL } from "../Utils";
 
 // URL schema
 const urlSchema = new Schema(
@@ -25,6 +26,14 @@ const urlSchema = new Schema(
   },
   { timestamps: true }
 );
+
+// update short url feild before saving url
+urlSchema.pre("save", function (next) {
+  if (!this.isModified("short_url")) next();
+
+  this.short_url = getShortURL();
+  next();
+});
 
 // update url hit count
 urlSchema.methods.increamentHits = async function () {
