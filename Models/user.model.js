@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 // users schema
 const userSchema = new Schema(
@@ -42,7 +43,7 @@ userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     { _id: this._id, username: this.username },
     process.env.AUTH_TOKEN,
-    { algorithm: "RS256", expiresIn: "1d" }
+    { algorithm: "HS512", expiresIn: "1d" }
   );
 };
 

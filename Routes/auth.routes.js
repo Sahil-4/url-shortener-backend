@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { deactivate, login, signup } from "../Controllers/auth.controllers.js";
+import { verifyJWT } from "../Middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -10,6 +11,6 @@ router.post("/signup", signup);
 router.post("/login", login);
 
 // delete account
-router.post("/deactivate", deactivate);
+router.post("/deactivate", verifyJWT, deactivate);
 
 export default router;
