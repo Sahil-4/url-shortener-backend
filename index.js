@@ -4,6 +4,7 @@ import cors from "cors";
 import { connectDatabase } from "./Database/index.js";
 import urlRoutes from "./Routes/url.routes.js";
 import authRoutes from "./Routes/auth.routes.js";
+import { handleRedirect } from "./Controllers/url.controllers.js";
 
 const app = express();
 
@@ -27,6 +28,9 @@ app.use("/api/v1/url", urlRoutes);
 
 // authentication routes
 app.use("/api/v1/auth", authRoutes);
+
+// handle redirects 
+app.get("/:hash", handleRedirect);
 
 // connect to database 
 // and start the server 

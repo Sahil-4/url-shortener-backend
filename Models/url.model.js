@@ -1,5 +1,5 @@
 import { model, Schema, Types } from "mongoose";
-import { getShortURL } from "../Utils";
+import { getShortURL } from "../Utils/index.js";
 
 // URL schema
 const urlSchema = new Schema(
@@ -29,7 +29,7 @@ const urlSchema = new Schema(
 
 // update short url feild before saving url
 urlSchema.pre("save", function (next) {
-  if (!this.isModified("short_url")) next();
+  if (!this.isModified("short_url")) return next();
 
   this.short_url = getShortURL();
   next();
