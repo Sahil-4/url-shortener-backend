@@ -11,6 +11,6 @@ router.post("/signup", signup);
 router.post("/login", login);
 
 // delete account
-router.post("/deactivate", verifyJWT, deactivate);
+router.get("/deactivate", verifyJWT, deactivate);
 
 export default router;

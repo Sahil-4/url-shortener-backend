@@ -8,7 +8,7 @@ const getHash = () => {
   for (let i = 0; i < 7; i++) hash += characterSet[getRandomIndex()];
 
   return hash;
-}
+}; 
 
 // function to generate short URL
 export const getShortURL = () => {
