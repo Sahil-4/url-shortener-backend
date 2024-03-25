@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import OTP from "../Models/otp.model.js";
 
 export const verifyJWT = (req, res, next) => {
   try {
@@ -14,5 +15,22 @@ export const verifyJWT = (req, res, next) => {
     return res
       .status(401)
       .json({ success: false, message: "Unauthorized request" });
+  }
+};
+
+export const verifyOTP = async (req, res, next) => {
+  try {
+    const { username, email, otp } = req.body;
+    const result = await OTP.findOne({ username, email, otp });
+
+    if (!result) return res.status(401).json({ success: false, message: "Invaid OTP" });
+
+    await OTP.findByIdAndDelete(result._id);
+
+    next();
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Unable to verify otp" });
   }
 };
