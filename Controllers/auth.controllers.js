@@ -1,4 +1,34 @@
+import OTP from "../Models/otp.model.js";
 import User from "../Models/user.model.js";
+import { sendOTPVerificationMail } from "../Services/mail.service.js";
+
+export const sendOTP = async (req, res) => {
+  try {
+    const { username, email } = req.body;
+
+    if (!username?.trim()) return res.status(400).send("username is required");
+    if (!email?.trim()) return res.status(400).send("email is required");
+
+    const user = await User.findOne({ email });
+    if (user) return res.status(409).json({ success: false, message: "user with this email already exists" });
+
+    const otp = await OTP.create({
+      username,
+      email,
+      otp: "000000",
+    });
+
+    sendOTPVerificationMail(otp.email, otp.otp);
+
+    return res
+      .status(200)
+      .json({ success: true, message: "otp send successfully", data: null });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "unable to send otp" });
+  }
+};
 
 export const signup = async (req, res) => {
   try {
