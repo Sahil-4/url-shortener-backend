@@ -10,7 +10,7 @@ export const sendOTP = async (req, res) => {
     if (!email?.trim()) return res.status(400).send("email is required");
 
     const user = await User.findOne({ email });
-    if (user) return res.status(409).json({ success: false, message: "user with this email already exists" });
+    if (user) return res.status(409).json({ success: false, message: "already exists a user with this email" });
 
     const otp = await OTP.create({
       username,
@@ -43,7 +43,7 @@ export const signup = async (req, res) => {
     if (existingUser)
       return res
         .status(409)
-        .json({ success: false, message: "user with email already exists" });
+        .json({ success: false, message: "already exists a user with this email" });
 
     const user = await User.create({
       username,
@@ -99,7 +99,7 @@ export const login = async (req, res) => {
 
     return res
       .status(200)
-      .json({ success: true, message: "user created successfully", data });
+      .json({ success: true, message: "login successful", data });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: "unable to login" });
