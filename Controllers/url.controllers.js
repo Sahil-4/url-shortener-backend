@@ -4,7 +4,7 @@ export const getAllURLs = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const urls = await URL.find({ user_id: userId });
+    const urls = await URL.find({ user_id: userId }).sort({createdAt: -1});
 
     return res.status(200).json({
       success: true,
@@ -79,7 +79,7 @@ export const deleteURL = async (req, res) => {
 
     return res
       .status(200)
-      .json({ success: true, message: "successfully deleted the url" });
+      .json({ success: true, message: "successfully deleted the url", data: url });
   } catch (error) {
     return res
       .status(500)
