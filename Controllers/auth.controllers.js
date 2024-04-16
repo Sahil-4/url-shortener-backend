@@ -1,6 +1,29 @@
+import BlacklistedEmail from "../Models/blacklisted-email.model.js";
 import OTP from "../Models/otp.model.js";
 import User from "../Models/user.model.js";
 import { sendOTPVerificationMail } from "../Services/mail.service.js";
+
+export const blacklistEmail = async (req, res) => {
+  try {
+    const { email, key } = req.query;
+
+    if (!email || !key || String(key) !== String(process.env.BLACKLISTING_KEY))
+      return res
+        .status(400)
+        .json({ success: false, message: "invalid request" });
+
+    const item = await BlacklistedEmail.create({ email });
+    if (!item) return res.status(500).json({ success: false, message: "unable to black list email" });
+
+    return res
+      .status(200)
+      .json({ success: true, message: "black listed email" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "unable to black list email" });
+  }
+};
 
 export const sendOTP = async (req, res) => {
   try {

@@ -1,11 +1,14 @@
 import { Router } from "express";
-import { deactivate, login, sendOTP, signup } from "../Controllers/auth.controllers.js";
-import { verifyJWT, verifyOTP } from "../Middlewares/auth.middleware.js";
+import { blacklistEmail, deactivate, login, sendOTP, signup } from "../Controllers/auth.controllers.js";
+import { validateEmail, verifyJWT, verifyOTP } from "../Middlewares/auth.middleware.js";
 
 const router = Router();
 
 // handle otp request
-router.post("/get-otp", sendOTP);
+router.post("/get-otp", validateEmail, sendOTP);
+
+// add email in black list
+router.get("/blacklist", blacklistEmail);
 
 // sign up first time
 router.post("/signup", verifyOTP, signup);

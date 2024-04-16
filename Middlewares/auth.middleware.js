@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import OTP from "../Models/otp.model.js";
+import { supportedEmailDomains } from "../constants.js";
+import BlacklistedEmail from "../Models/blacklisted-email.model.js";
 
 export const verifyJWT = (req, res, next) => {
   try {
@@ -32,5 +34,24 @@ export const verifyOTP = async (req, res, next) => {
     return res
       .status(500)
       .json({ success: false, message: "unable to verify otp" });
+  }
+};
+
+export const validateEmail = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const domain = email.split("@").at(-1);
+
+    const index = supportedEmailDomains.findIndex((sDomain) => sDomain === domain);
+    if (index === -1) return res.status(400).json({ success: false, message: "unsupported email domain" });
+
+    const isBlocked = await BlacklistedEmail.find({ email });
+    if (isBlocked.length !== 0) return res.status(409).json({ success: false, message: "invalid email address" });
+
+    next();
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "unable to verify email" });
   }
 };
