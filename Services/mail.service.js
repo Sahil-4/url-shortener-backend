@@ -20,7 +20,7 @@ const getOTPMail = (receiver, PIN) => {
     },
     to: receiver,
     subject: "Email Verification - URL Shortener App ",
-    text: `${PIN} is the OTP for your email verification at ${process.env.DOMAIN} valid only for 5 minutes.\n\nNOTE: Please ignore this email if it is not requested by you. We never create or register any account without email verification.\nThanks\nFrom URL Shortener App`,
+    text: `${PIN} is the OTP for your email verification at ${process.env.ORIGIN} valid only for 5 minutes.\n\nNOTE: Please ignore this email if it is not requested by you. We never create or register any account without email verification.\nThanks\nFrom URL Shortener App`,
   };
 };
 
